@@ -20,12 +20,12 @@
 ## Credit and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 
-Name of feature: ________________________________
+Name of feature: get city name and displays it name and map.
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 2h
 
-Start time: _____
+Start time: 9:00pm
 
-Finish time: _____
+Finish time: 11:30pm
 
-Actual time needed to complete: _____
+Actual time needed to complete: 2h 30min
