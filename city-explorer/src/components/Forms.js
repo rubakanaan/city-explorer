@@ -34,6 +34,7 @@ export class Forms extends Component {
       this.setState({
         cityData: axiosData.data[0],
         display: true,
+        alert:false
       })
     } catch (error) {
       this.setState({
