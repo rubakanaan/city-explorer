@@ -14,7 +14,8 @@ export class Forms extends Component {
       cityData: {},
       display: false,
       error: "",
-      alert: false
+      alert: false,
+      weatherData:[]
     }
   }
 
@@ -29,13 +30,19 @@ export class Forms extends Component {
   getData = async (e) => {
     e.preventDefault();
     try {
+     console.log(process.env.REACT_APP_URL);
       const axiosData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.88bdc34a015f169659efd4fa8583736c&q=${this.state.cityName}&format=json`)
+      const appRes = await axios.get(`${process.env.REACT_APP_URL}/weather-data`);
       console.log(axiosData);
+      console.log(appRes);
       this.setState({
         cityData: axiosData.data[0],
         display: true,
-        alert:false
+        alert:false,
+        weatherData:appRes.data.data
+       
       })
+       
     } catch (error) {
       this.setState({
         errot: error.message,
@@ -71,6 +78,16 @@ export class Forms extends Component {
             <p>
               {`latitude: ${this.state.cityData.lat}, longitude: ${this.state.cityData.lon}`}
             </p>
+
+            {
+              this.state.weatherData.map((value)=>{
+                return(
+                <p>
+                 { value.weather.description}
+                   </p>
+                )
+              })
+            }
           </div>
         }
       </div>
