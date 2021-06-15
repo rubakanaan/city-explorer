@@ -4,6 +4,9 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 import Alertmsg from './Alertmsg';
+import Weather from './Weather';
+import Card from 'react-bootstrap/Card'
+
 
 export class Forms extends Component {
 
@@ -15,7 +18,7 @@ export class Forms extends Component {
       display: false,
       error: "",
       alert: false,
-      weatherData:[]
+      weatherData: []
     }
   }
 
@@ -30,19 +33,19 @@ export class Forms extends Component {
   getData = async (e) => {
     e.preventDefault();
     try {
-     console.log(process.env.REACT_APP_URL);
+      console.log(process.env.REACT_APP_URL);
       const axiosData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.88bdc34a015f169659efd4fa8583736c&q=${this.state.cityName}&format=json`)
-      const appRes = await axios.get(`${process.env.REACT_APP_URL}/weather-data`);
+      const appRes = await axios.get(`${process.env.REACT_APP_URL}/weather`);
       console.log(axiosData);
       console.log(appRes);
       this.setState({
         cityData: axiosData.data[0],
         display: true,
-        alert:false,
-        weatherData:appRes.data.data
-       
+        alert: false,
+        weatherData: appRes.data
+
       })
-       
+
     } catch (error) {
       this.setState({
         errot: error.message,
@@ -59,7 +62,7 @@ export class Forms extends Component {
         <Alertmsg
           alert={this.state.alert}
         />
-
+         <Card style={{ width: '38rem' }}>
         <Form onSubmit={this.getData}>
           <Form.Group className="mb-3" controlId="formBasicEmail" 	 >
             <Form.Label>City Name</Form.Label>
@@ -69,26 +72,23 @@ export class Forms extends Component {
             Explore!
           </Button>
         </Form>
+         </Card>
+
         {this.state.display &&
           <div>
             <p>
               {this.state.cityData.display_name}
             </p>
-            <Image src={`https://maps.locationiq.com/v3/staticmap?key=pk.88bdc34a015f169659efd4fa8583736c&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} rounded/>
+            <Image src={`https://maps.locationiq.com/v3/staticmap?key=pk.88bdc34a015f169659efd4fa8583736c&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} rounded />
             <p>
               {`latitude: ${this.state.cityData.lat}, longitude: ${this.state.cityData.lon}`}
             </p>
-
-            {
-              this.state.weatherData.map((value)=>{
-                return(
-                <p>
-                 { value.weather.description}
-                   </p>
-                )
-              })
-            }
+           
+            <Weather
+            weatherData={this.state.weatherData}
+            />
           </div>
+
         }
       </div>
     )
