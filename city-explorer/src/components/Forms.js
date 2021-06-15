@@ -34,7 +34,7 @@ export class Forms extends Component {
 
   getData = async (e) => {
     e.preventDefault();
-    // try {
+    try {
       console.log(process.env.REACT_APP_URL);
       await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.88bdc34a015f169659efd4fa8583736c&q=${this.state.cityName}&format=json`).then(axiosData => {
         this.setState({
@@ -52,12 +52,12 @@ export class Forms extends Component {
         });
       })
 
-    // } catch (error) {
-    //   this.setState({
-    //     errot: error.message,
-    //     alert: true
-    //   })
-    // }
+    } catch (error) {
+      this.setState({
+        errot: error.message,
+        alert: true
+      })
+    }
   }
 
 
