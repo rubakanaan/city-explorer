@@ -18,7 +18,9 @@ export class Forms extends Component {
       display: false,
       error: "",
       alert: false,
-      weatherData: []
+      weatherData: [],
+      lat: '',
+      lon: ''
     }
   }
 
@@ -32,26 +34,30 @@ export class Forms extends Component {
 
   getData = async (e) => {
     e.preventDefault();
-    try {
+    // try {
       console.log(process.env.REACT_APP_URL);
-      const axiosData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.88bdc34a015f169659efd4fa8583736c&q=${this.state.cityName}&format=json`)
-      const appRes = await axios.get(`${process.env.REACT_APP_URL}/weather`);
-      console.log(axiosData);
-      console.log(appRes);
-      this.setState({
-        cityData: axiosData.data[0],
-        display: true,
-        alert: false,
-        weatherData: appRes.data
+      await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.88bdc34a015f169659efd4fa8583736c&q=${this.state.cityName}&format=json`).then(axiosData => {
+        this.setState({
+          cityData: axiosData.data[0],
+          lat: axiosData.data[0].lat,
+          lon: axiosData.data[0].lon,
+        })
+        axios.get(`${process.env.REACT_APP_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then(apiReq => {
 
+          this.setState({
+            weatherData: apiReq.data,
+            display: true,
+            alert: false,
+          })
+        });
       })
 
-    } catch (error) {
-      this.setState({
-        errot: error.message,
-        alert: true
-      })
-    }
+    // } catch (error) {
+    //   this.setState({
+    //     errot: error.message,
+    //     alert: true
+    //   })
+    // }
   }
 
 
@@ -62,17 +68,17 @@ export class Forms extends Component {
         <Alertmsg
           alert={this.state.alert}
         />
-         <Card style={{ width: '38rem' }}>
-        <Form onSubmit={this.getData}>
-          <Form.Group className="mb-3" controlId="formBasicEmail" 	 >
-            <Form.Label>City Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter City Name" onChange={this.updateCity} size={'sm'} />
-          </Form.Group>
-          <Button variant="primary" type="submit" >
-            Explore!
-          </Button>
-        </Form>
-         </Card>
+        <Card style={{ width: '38rem' }}>
+          <Form onSubmit={this.getData}>
+            <Form.Group className="mb-3" controlId="formBasicEmail" 	 >
+              <Form.Label>City Name</Form.Label>
+              <Form.Control type="text" placeholder="Enter City Name" onChange={this.updateCity} size={'sm'} />
+            </Form.Group>
+            <Button variant="primary" type="submit" >
+              Explore!
+            </Button>
+          </Form>
+        </Card>
 
         {this.state.display &&
           <div>
@@ -83,9 +89,9 @@ export class Forms extends Component {
             <p>
               {`latitude: ${this.state.cityData.lat}, longitude: ${this.state.cityData.lon}`}
             </p>
-           
+
             <Weather
-            weatherData={this.state.weatherData}
+              weatherData={this.state.weatherData}
             />
           </div>
 
