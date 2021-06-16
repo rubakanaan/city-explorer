@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Image from 'react-bootstrap/Image'
 import Alertmsg from './Alertmsg';
 import Weather from './Weather';
-import Card from 'react-bootstrap/Card'
+import Movie from './Movie'
+import FormDisplay from './FormDisplay';
 
 
 export class Forms extends Component {
@@ -20,7 +18,8 @@ export class Forms extends Component {
       alert: false,
       weatherData: [],
       lat: '',
-      lon: ''
+      lon: '',
+      movieData: []
     }
   }
 
@@ -32,6 +31,7 @@ export class Forms extends Component {
     console.log(this.state);
   }
 
+
   getData = async (e) => {
     e.preventDefault();
     try {
@@ -42,8 +42,8 @@ export class Forms extends Component {
           lat: axiosData.data[0].lat,
           lon: axiosData.data[0].lon,
         })
-        axios.get(`${process.env.REACT_APP_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then(apiReq => {
 
+        axios.get(`${process.env.REACT_APP_URL}/weather?lat=${this.state.lat}&lon=${this.state.lon}`).then(apiReq => {
           this.setState({
             weatherData: apiReq.data,
             display: true,
@@ -51,13 +51,20 @@ export class Forms extends Component {
           })
         });
       })
-
     } catch (error) {
       this.setState({
         errot: error.message,
         alert: true
       })
     }
+
+    axios.get(`${process.env.REACT_APP_URL}/movie?query=amman`).then(apiReq => {
+      console.log(this.state.cityData);
+      this.setState({
+        movieData: apiReq.data,
+
+      })
+    });
   }
 
 
@@ -68,35 +75,24 @@ export class Forms extends Component {
         <Alertmsg
           alert={this.state.alert}
         />
-        <Card style={{ width: '38rem' }}>
-          <Form onSubmit={this.getData}>
-            <Form.Group className="mb-3" controlId="formBasicEmail" 	 >
-              <Form.Label>City Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter City Name" onChange={this.updateCity} size={'sm'} />
-            </Form.Group>
-            <Button variant="primary" type="submit" >
-              Explore!
-            </Button>
-          </Form>
-        </Card>
 
-        {this.state.display &&
-          <div>
-            <p>
-              {this.state.cityData.display_name}
-            </p>
-            <Image src={`https://maps.locationiq.com/v3/staticmap?key=pk.88bdc34a015f169659efd4fa8583736c&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=10`} rounded />
-            <p>
-              {`latitude: ${this.state.cityData.lat}, longitude: ${this.state.cityData.lon}`}
-            </p>
+        <FormDisplay
+          updateCity={this.updateCity}
+          getData={this.getData}
+          display={this.state.display}
+          cityData={this.state.cityData}
+        />
 
-            <Weather
-              weatherData={this.state.weatherData}
-            />
-          </div>
+        <Weather
+          weatherData={this.state.weatherData}
+        />
 
-        }
+        <Movie
+          movieData={this.state.movieData}
+        />
+
       </div>
+
     )
   }
 }
