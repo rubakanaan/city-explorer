@@ -65,7 +65,6 @@ export class Forms extends Component {
 
       })
     });
-
   }
 
 
