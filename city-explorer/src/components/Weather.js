@@ -9,17 +9,17 @@ export class Weather extends Component {
                 {this.props.weatherData.map((value) => {
                     return (
                         <Card border="light" style={{ width: '35rem' }}>
-                             <Card.Text>
+                            <Card.Text>
                                 description": "Low of {value.low}, High of {value.high} with  {value.description}"
-                                </Card.Text>
-                           <Card.Text>
+                            </Card.Text>
+                            <Card.Text>
                                 date": {value.date}
-                           </Card.Text>
-                        
+                            </Card.Text>
+
                         </Card>
-        )
-    })
-}
+                    )
+                })
+                }
             </div >
         )
     }

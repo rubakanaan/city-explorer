@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // //import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Forms from './components/Forms'
+import Main from './components/Main'
 
 class App extends Component {
 
@@ -11,7 +11,7 @@ class App extends Component {
         <header >
           <h1>City Explorer </h1>
         </header>
-        <Forms />
+        <Main />
 
       </div>
     );
